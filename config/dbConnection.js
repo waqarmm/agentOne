@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
-const db = process.env.NODE_ENV === 'production' ? process.env.DB_REMOTE : process.env.DB_REMOTE;
+const db =  process.env.DB_REMOTE;
 
 const dbConnect = async () => {
-    try {
+	try {
+		console.log("DB____", db);
         await mongoose.connect(db, {
             useUnifiedTopology: true,
-            useFindAndModify: false,
             useNewUrlParser: true,
             autoIndex: true,
-            useCreateIndex: true,
+            
         });
         console.log('DB Connected Successfuly');
     } catch (error) {

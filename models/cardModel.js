@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ERRORS } = require('../../constants/index');
+const { ERRORS } = require('../constants/index')
 
 const cardSchema = new mongoose.Schema(
     {
@@ -18,7 +18,7 @@ const cardSchema = new mongoose.Schema(
 		comments: {
 			type: String,
 		},
-		status{
+		status:{
 			type: String,
 		}
     },
@@ -27,10 +27,10 @@ const cardSchema = new mongoose.Schema(
     }
 );
 
-cardSchema.pre('save', function (next) {
-    this.slug = this.title.replace(/\s/g, '').toLowerCase();
-    next();
-});
+// cardSchema.pre('save', function (next) {
+//     this.slug = this.title.replace(/\s/g, '').toLowerCase();
+//     next();
+// });
 
-const Category = mongoose.model('card', cardSchema);
-module.exports = Category;
+const Card = mongoose.model('card', cardSchema);
+module.exports = Card;

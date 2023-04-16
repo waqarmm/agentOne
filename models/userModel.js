@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
-const validator = require("validator");
+
 const { ERRORS } = require("../constants/index");
 const {
-  encryptPassword,
-  passwordChanged,
-} = require("../../utils/mongoose-middlewares/middlewares");
+	encryptPassword,
+	passwordChanged,
+} = require("../utils/mongoose-middlewares/middlewares");
 const {
   correctPassword,
   passwordChangedAfter,
   createPasswordResetToken,
-} = require("../../utils/methods/methods");
+} = require("../utils/methods/methods");
 
 const userSchema = new mongoose.Schema(
   {
-    firstName: {
+    firstName: {    
       type: String,
       minlength: 3,
       maxlength: 15,
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 15,
       required: [true, ERRORS.REQUIRED.LASTNAME_REQUIRED],
-      validate: [validator.isAlpha, ERRORS.INVALID.INVALID_LASTNAME],
+      
     },
 
     email: {
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
       required: [true, ERRORS.REQUIRED.EMAIL_REQUIRED],
-      validate: [validator.isEmail, ERRORS.INVALID.INVALID_EMAIL],
+      
     },
     phone: {
       type: String,
@@ -199,3 +199,4 @@ userSchema.methods.createPhoneVerifyToken = async function () {
 };
 
 const User = mongoose.model("user", userSchema);
+module.exports = User;

@@ -1,16 +1,14 @@
 
 const AppError = require('../../utils/AppError');
 const catchAsync = require('../../utils/catchAsync');
-const User = require('../../models/users/userModel');
+const User = require('../../models/userModel');
 const { ERRORS, STATUS_CODE, SUCCESS_MSG, STATUS, ROLES, TYPES } = require('../../constants/index');
 const jwtManagement = require('../../utils/jwtManagement');
 const roles = require('../../constants/userRoles');
 
 exports.signup = catchAsync(async (req, res, next) => {
     try{
-    if (!req.body.country) {
-        return next(new AppError('Country is required', STATUS_CODE.BAD_REQUEST));
-    }
+
     req.body.status = 'approved';
     let result;
 
@@ -28,25 +26,9 @@ exports.signup = catchAsync(async (req, res, next) => {
         );
     }
 
-    if(req.body.invite){
-        const isInvite = await Invite.findOne({ code: req.body.invite });
-        if (!isInvite) {
-            return next(
-                new AppError('Invite code is invalid', STATUS_CODE.BAD_REQUEST)
-            );
-        }
-    }
-
-    const session = await User.startSession();
-    await session.withTransaction(async () => {
-        result = await User.create([req.body], { session: session });
+        result = await User.create(req.body);
        
-        await generateCode(result[0]);
-      
-    });
-
    
-    session.endSession();
     res.status(STATUS_CODE.OK).json({
         status: STATUS.SUCCESS,
         message: SUCCESS_MSG.SUCCESS_MESSAGES.OPERATION_SUCCESSFULL,
@@ -62,17 +44,18 @@ catch(err){
     
 }});
 
-exports.login = (Model, ...role) => catchAsync(async (req, res, next) => {
-    try{
+exports.login =catchAsync(async (req, res, next) => {
+	try {
+		
     const { email, password } = req.body;
     if (!email || !password) {
         // checking email or password empty?
         return next(new AppError(ERRORS.INVALID.NO_CREDENTIALS_EMAIL, STATUS_CODE.BAD_REQUEST));
     }
     // Finding user by username, phone or email
-    const user = await Model.findOne({ email: email })
+    const user = await User.findOne({ email: email })
         .select('+password')
-        .populate('customer provider');
+      
     //
     if (!user || !(await user.correctPassword(password, user.password))) {
         //user existance and password is correct
@@ -80,11 +63,7 @@ exports.login = (Model, ...role) => catchAsync(async (req, res, next) => {
             new AppError(ERRORS.INVALID.INVALID_LOGIN_CREDENTIALS, STATUS_CODE.BAD_REQUEST)
         );
     }
-    if (!role.includes(user.role)) {
-        return next(
-            new AppError(ERRORS.INVALID.INVALID_LOGIN_CREDENTIALS, STATUS_CODE.BAD_REQUEST)
-        );
-    }
+ 
     if (!user.isEmailVerified) {
         return next(new AppError(ERRORS.INVALID.VERIFY_EMAIL, STATUS_CODE.UNAUTHORIZED));
     }
@@ -96,7 +75,8 @@ exports.login = (Model, ...role) => catchAsync(async (req, res, next) => {
     if (user.status !== 'approved') {
         // If no user and not active:true then return Error
         return next(new AppError(ERRORS.INVALID.NOT_APPROVED, STATUS_CODE.NOT_FOUND));
-    }
+	}
+		console.log("hello");
     jwtManagement.createSendJwtToken(user, STATUS_CODE.OK, req, res);
 }
 catch(err){
