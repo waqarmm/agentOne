@@ -4,5 +4,4 @@ exports.STATUS = require("./status");
 exports.STATUS_CODE = require("./statusCode");
 exports.ROUTES = require("./routes");
 exports.ROLES = require("./userRoles");
-exports.TYPES = require("./type");
 exports.PERMISSIONS = require("./permission");

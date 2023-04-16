@@ -9,8 +9,5 @@ exports.SUCCESS_MESSAGES = {
     OPERATION_SUCCESSFULL: 'Operation Successfull',
     ACCOUNT_VERIFICATION_TOKEN: 'Account verification token Sent, Please Verify First.',
     ACCOUNT_APPROVED: 'Your account is approved by the admins. Please login to your account.',
-    PROMOTION_APPROVED:'Your promotions is approve by the admin.Please make the payment to run the promotion.',
-    PRODUCT_APPROVED:'Your product is approved by the admins.',
-    SERVICE_APPROVED:'Your service is approved by the admins',
     REQUEST_UPDATED:'Your request is updated',
 };

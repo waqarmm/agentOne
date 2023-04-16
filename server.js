@@ -2,7 +2,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
+const AppError = require('./utils/AppError');
+const errorHandler = require('./controllers/error/errorhandler');
 
+const PORT = process.env.PORT || 5000;
+const app = express();
 // CORS
 const corsOptions = {
 	origin: '*',
